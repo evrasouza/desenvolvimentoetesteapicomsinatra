@@ -1,4 +1,16 @@
 require "sinatra"
+require "mongoid"
+
+# DB Connect
+Mongoid.load! "mongoid.yml"
+
+class Book
+  include Mongoid::Document
+
+  field :title, type: String
+  field :author, type: String
+  field :isbn, type: String
+end
 
 get "/" do
   content_type "application/json"
@@ -7,10 +19,5 @@ end
 
 get "/books" do
   content_type "application/json"
-  books = [
-    { title: "Dom Casmurro", author: "Machado de Assis", isbn: "abd2001" },
-    { title: "A marca de uma lágrima", author: "Pedro Bandeira", isbn: "abd2002" },
-    { title: "Moby Dick", author: "Hernan Melville", isbn: "abd2003" },
-  ]
-  return books.to_json
+  return Book.all.to_json
 end
