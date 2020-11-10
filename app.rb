@@ -1,4 +1,5 @@
 require "sinatra"
+require "sinatra/namespace"
 require "mongoid"
 
 # DB Connect
@@ -17,7 +18,12 @@ get "/" do
   return { message: "Welcome to book Api from QA Ninja!" }.to_json
 end
 
-get "/books" do
-  content_type "application/json"
-  return Book.all.to_json
+namespace "/books" do
+  before do
+    content_type "application/json"
+  end
+
+  get do
+    return Book.all.to_json
+  end
 end
